@@ -2,33 +2,53 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
+	"strconv"
 
 	"cepservice/providers"
 
 	"github.com/gorilla/mux"
 )
 
-type errorResponse struct {
-	Message string
-}
-
 func findPostalCode(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	postalCode := params["postalCode"]
+	postalCode, err := validatePostalCode(params["postalCode"])
+
+	if err != nil {
+		errorResponse(w, err, 422)
+		return
+	}
 
 	result, err := providers.FindPostalCode(postalCode)
 
 	w.Header().Set("Content-Type", "application/json")
 
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(errorResponse{"Postal code not found"})
-	} else {
-		json.NewEncoder(w).Encode(result)
+		errorResponse(w, err, 404)
+		return
 	}
 
+	json.NewEncoder(w).Encode(result)
+
+}
+
+func errorResponse(w http.ResponseWriter, err error, statusCode int) {
+	http.Error(w, err.Error(), statusCode)
+}
+
+func validatePostalCode(postalCode string) (string, error) {
+	if len(postalCode) != 8 {
+		return "", errors.New("Postal code must have 8 characters")
+	}
+
+	_, err := strconv.ParseInt(postalCode, 10, 64)
+	if err != nil {
+		return "", errors.New("Postal code must contain only numbers")
+	}
+
+	return postalCode, nil
 }
 
 func main() {

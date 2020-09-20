@@ -18,6 +18,7 @@ type viaCep struct {
 	Gia         string
 	Ddd         string
 	Siafi       string
+	Erro        bool
 }
 
 func convertViaCepToPostalCode(viaCep viaCep) PostalCode {
@@ -48,6 +49,10 @@ func viaCepProvider(postalCode string) (PostalCode, error) {
 
 	var viaCep viaCep
 	json.Unmarshal([]byte(body), &viaCep)
+
+	if viaCep.Erro {
+		return PostalCode{}, errors.New("Postal code not found")
+	}
 
 	return convertViaCepToPostalCode(viaCep), nil
 }
