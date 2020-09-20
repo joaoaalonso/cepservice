@@ -2,8 +2,8 @@ package providers
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -31,23 +31,23 @@ func convertViaCepToPostalCode(viaCep viaCep) PostalCode {
 	}
 }
 
-func viaCepProvider(postalCode string) PostalCode {
+func viaCepProvider(postalCode string) (PostalCode, error) {
 	url := "https://viacep.com.br/ws/" + postalCode + "/json/unicode/"
 
 	resp, err := http.Get(url)
-	if err != nil {
-		log.Fatalln(err)
+	if err != nil || resp.StatusCode != 200 {
+		return PostalCode{}, errors.New("Postal code not found")
 	}
 
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalln(err)
+		return PostalCode{}, errors.New("Postal code not found")
 	}
 
 	var viaCep viaCep
 	json.Unmarshal([]byte(body), &viaCep)
 
-	return convertViaCepToPostalCode(viaCep)
+	return convertViaCepToPostalCode(viaCep), nil
 }

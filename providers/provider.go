@@ -1,5 +1,9 @@
 package providers
 
+import (
+	"errors"
+)
+
 // PostalCode interface
 type PostalCode struct {
 	PostalCode   string
@@ -11,21 +15,37 @@ type PostalCode struct {
 }
 
 // FindPostalCode search for zip data in all providers
-func FindPostalCode(postalCode string) PostalCode {
-	result := make(chan PostalCode)
+func FindPostalCode(postalCode string) (PostalCode, error) {
+	ch := make(chan PostalCode)
+	errs := make(chan error)
+	countErr := 0
 
-	var providers = []func(string) PostalCode{
+	var providers = []func(string) (PostalCode, error){
 		viaCepProvider,
 		wideNetProvider,
+		postmonProvider,
 	}
 
 	for i := 0; i < len(providers); i++ {
 		provider := providers[i]
 
 		go func() {
-			result <- provider(postalCode)
+			result, err := provider(postalCode)
+			if err != nil {
+				countErr++
+				if countErr == len(providers) {
+					errs <- errors.New("Postal code not found")
+				}
+			} else {
+				ch <- result
+			}
 		}()
 	}
 
-	return <-result
+	select {
+	case res := <-ch:
+		return res, nil
+	case err := <-errs:
+		return PostalCode{}, err
+	}
 }

@@ -10,14 +10,25 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type errorResponse struct {
+	Message string
+}
+
 func findPostalCode(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	postalCode := params["id"]
 
-	result := providers.FindPostalCode(postalCode)
+	result, err := providers.FindPostalCode(postalCode)
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(result)
+
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("Postal code not found")
+	} else {
+		json.NewEncoder(w).Encode(result)
+	}
+
 }
 
 func main() {
