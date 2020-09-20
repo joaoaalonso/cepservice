@@ -24,6 +24,7 @@ func FindPostalCode(postalCode string) (PostalCode, error) {
 		viaCepProvider,
 		wideNetProvider,
 		postmonProvider,
+		republicaVirtualProvider,
 	}
 
 	for i := 0; i < len(providers); i++ {
