@@ -16,7 +16,7 @@ type errorResponse struct {
 
 func findPostalCode(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	postalCode := params["id"]
+	postalCode := params["postalCode"]
 
 	result, err := providers.FindPostalCode(postalCode)
 
@@ -24,7 +24,7 @@ func findPostalCode(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode("Postal code not found")
+		json.NewEncoder(w).Encode(errorResponse{"Postal code not found"})
 	} else {
 		json.NewEncoder(w).Encode(result)
 	}
@@ -33,7 +33,7 @@ func findPostalCode(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	router := mux.NewRouter()
-	router.HandleFunc("/{id}", findPostalCode).Methods("GET")
+	router.HandleFunc("/{postalCode}", findPostalCode).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
