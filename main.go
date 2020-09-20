@@ -5,10 +5,12 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"cepservice/providers"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -51,9 +53,20 @@ func validatePostalCode(postalCode string) (string, error) {
 	return postalCode, nil
 }
 
+func loggingHandler(h http.Handler) http.Handler {
+	return handlers.LoggingHandler(os.Stdout, h)
+}
+
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/{postalCode}", findPostalCode).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":8000", router))
+	port := "8000"
+
+	router.Use(loggingHandler)
+	router.Use(handlers.CompressHandler)
+	router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
+
+	log.Println("listening on " + port)
+	http.ListenAndServe(":"+port, router)
 }
