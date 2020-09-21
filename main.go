@@ -12,6 +12,7 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"go.elastic.co/apm/module/apmgorilla"
 )
 
 func findPostalCode(w http.ResponseWriter, r *http.Request) {
@@ -59,13 +60,14 @@ func loggingHandler(h http.Handler) http.Handler {
 
 func main() {
 	router := mux.NewRouter()
-	router.HandleFunc("/{postalCode}", findPostalCode).Methods("GET")
+	router.HandleFunc("/cep/{postalCode}", findPostalCode).Methods("GET")
 
 	port := "8000"
 
 	router.Use(loggingHandler)
 	router.Use(handlers.CompressHandler)
 	router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
+	router.Use(apmgorilla.Middleware())
 
 	log.Println("listening on " + port)
 	http.ListenAndServe(":"+port, router)

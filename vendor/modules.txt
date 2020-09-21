@@ -1,0 +1,75 @@
+# github.com/armon/go-radix v1.0.0
+github.com/armon/go-radix
+# github.com/elastic/go-sysinfo v1.4.0
+## explicit
+github.com/elastic/go-sysinfo
+github.com/elastic/go-sysinfo/internal/registry
+github.com/elastic/go-sysinfo/providers/aix
+github.com/elastic/go-sysinfo/providers/darwin
+github.com/elastic/go-sysinfo/providers/linux
+github.com/elastic/go-sysinfo/providers/shared
+github.com/elastic/go-sysinfo/providers/windows
+github.com/elastic/go-sysinfo/types
+# github.com/elastic/go-windows v1.0.1
+## explicit
+github.com/elastic/go-windows
+# github.com/felixge/httpsnoop v1.0.1
+github.com/felixge/httpsnoop
+# github.com/gorilla/handlers v1.5.1
+## explicit
+github.com/gorilla/handlers
+# github.com/gorilla/mux v1.8.0
+## explicit
+github.com/gorilla/mux
+# github.com/joeshaw/multierror v0.0.0-20140124173710-69b34d4ec901
+github.com/joeshaw/multierror
+# github.com/pkg/errors v0.9.1
+## explicit
+github.com/pkg/errors
+# github.com/prometheus/procfs v0.1.3
+## explicit
+github.com/prometheus/procfs
+github.com/prometheus/procfs/internal/fs
+github.com/prometheus/procfs/internal/util
+# github.com/santhosh-tekuri/jsonschema v1.2.4
+github.com/santhosh-tekuri/jsonschema
+github.com/santhosh-tekuri/jsonschema/decoders
+github.com/santhosh-tekuri/jsonschema/formats
+github.com/santhosh-tekuri/jsonschema/loader
+github.com/santhosh-tekuri/jsonschema/mediatypes
+# go.elastic.co/apm v1.8.0
+## explicit
+go.elastic.co/apm
+go.elastic.co/apm/apmconfig
+go.elastic.co/apm/internal/apmcontext
+go.elastic.co/apm/internal/apmhostutil
+go.elastic.co/apm/internal/apmhttputil
+go.elastic.co/apm/internal/apmlog
+go.elastic.co/apm/internal/apmschema
+go.elastic.co/apm/internal/apmstrings
+go.elastic.co/apm/internal/apmversion
+go.elastic.co/apm/internal/configutil
+go.elastic.co/apm/internal/iochan
+go.elastic.co/apm/internal/pkgerrorsutil
+go.elastic.co/apm/internal/ringbuffer
+go.elastic.co/apm/internal/wildcard
+go.elastic.co/apm/model
+go.elastic.co/apm/stacktrace
+go.elastic.co/apm/transport
+# go.elastic.co/apm/module/apmgorilla v1.8.0
+## explicit
+go.elastic.co/apm/module/apmgorilla
+# go.elastic.co/apm/module/apmhttp v1.8.0
+go.elastic.co/apm/module/apmhttp
+# go.elastic.co/fastjson v1.1.0
+## explicit
+go.elastic.co/fastjson
+# golang.org/x/sys v0.0.0-20200918174421-af09f7315aff
+## explicit
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+golang.org/x/sys/windows/registry
+# howett.net/plist v0.0.0-20200419221736-3b63eb3a43b5
+## explicit
+howett.net/plist
