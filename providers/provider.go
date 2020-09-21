@@ -12,10 +12,13 @@ type PostalCode struct {
 	Address      string
 	Neighborhood string
 	Provider     string
+	Latitude     float32
+	Longitude    float32
 }
 
 // FindPostalCode search for zip data in all providers
-func FindPostalCode(postalCode string) (PostalCode, error) {
+func FindPostalCode(postalCode string, token string) (PostalCode, error) {
+	fetchingLatLong := false
 	ch := make(chan PostalCode)
 	errs := make(chan error)
 	countErr := 0
@@ -38,9 +41,21 @@ func FindPostalCode(postalCode string) (PostalCode, error) {
 				if countErr == len(providers) {
 					errs <- errors.New("Postal code not found")
 				}
-			} else {
-				ch <- result
+				return
 			}
+
+			if token == "" || (result.Latitude != 0 && result.Longitude != 0) {
+				ch <- result
+				return
+			}
+
+			if fetchingLatLong {
+				return
+			}
+
+			fetchingLatLong = true
+			result.Latitude, result.Longitude = fetchLatLong(postalCode, token)
+			ch <- result
 		}()
 	}
 

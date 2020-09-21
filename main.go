@@ -18,13 +18,14 @@ import (
 func findPostalCode(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	postalCode, err := validatePostalCode(params["postalCode"])
+	token := r.Header.Get("X-Google-Api-Key")
 
 	if err != nil {
 		errorResponse(w, err, 422)
 		return
 	}
 
-	result, err := providers.FindPostalCode(postalCode)
+	result, err := providers.FindPostalCode(postalCode, token)
 
 	w.Header().Set("Content-Type", "application/json")
 
